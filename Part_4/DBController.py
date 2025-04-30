@@ -58,3 +58,6 @@ class DBController:
     def close_connection(self):
         self.conn.close()
         print("[INFO] Connection Terminated: " + sqlite3.sqlite_version)
+
+    def getName(self):
+        return self.db_name

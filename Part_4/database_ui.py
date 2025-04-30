@@ -2,16 +2,90 @@ import sqlite3
 from sqlite3 import Error
 import sys
 import os
+from time import sleep
 from DBController import DBController
 
 db_controller = None
 
 #Clears the terminal
-def clear_term():
+def clearTerm():
     if os.name == "nt":
         os.system("cls")
     else:
         os.system("clear")
+
+#checks wether a string can be cast to int
+def isInputInt(string):
+    try:
+        int(string)
+        return True
+    except ValueError:
+        return False
+
+#prints name of database that is connected
+def printConnectionTitle():
+    print('================================================================================')
+    print(f'Connected to DB: {db_controller.getName()}')
+    print('================================================================================')
+    print('\n')
+
+#prints the title of the menu
+def printMenuTitle(title):
+    print(f'{title} Menu')
+    print('--------------------------------------------------------------------------------')
+
+
+# clears and prints options
+def printMainMenuOptions():
+    clearTerm()
+    printConnectionTitle()
+    printMenuTitle('Main')
+    print("Please select from the below options using the number:")
+    print("1. Members Menu")
+    print("2. Classes menu")
+    print("3. Equipment menu")
+    print("4. Logout and Exit")
+    print('--------------------------------------------------------------------------------')
+
+# clears and prints options
+def printMemberMenuOptions():
+    clearTerm()
+    printConnectionTitle()
+    printMenuTitle('Member')
+    print("Please select from the below options using the number:")
+    print("1. View All Members")
+    print("2. Add a New Member")
+    print("3. Update Member Information")
+    print("4. Delete Member with ID")
+    print("0. Return to Main Menu")
+    print('--------------------------------------------------------------------------------')
+
+# clears and prints options
+def printClassMenuOptions():
+    clearTerm()
+    printConnectionTitle()
+    printMenuTitle('Class')
+    print("Please select from the below options using the number:")
+    print('1. Classes w/ Attendance')
+    print('2. Add New Class')
+    print('3. Update Class Information')
+    print('4. Delete Class by ID')
+    print('5. Find Members in Class by ID')
+    print('0. Return to Main Menu')
+    print('--------------------------------------------------------------------------------')
+
+# clears and prints options
+def printEquipmentMenuOptions():
+    clearTerm()
+    printConnectionTitle()
+    printMenuTitle('Equipment')
+    print("Please select from the below options using the number:")
+    print('1. Show All Equipment')
+    print('2. Add New Equipment')
+    print('3. Update Equipment Information')
+    print('4. Delete Equipment by ID ')
+    print('0. Return to Main Menu')
+    print('--------------------------------------------------------------------------------')
 
 # asks the user to connect to a datbase and if it does not exist then if they want to create it
 def userConnection():
@@ -21,7 +95,7 @@ def userConnection():
     db_exists = os.path.exists(db_name)
 
     if not db_exists:
-        clear_term()
+        clearTerm()
         print(f"The database {db_name} does not exist. \n")
         res = input("Do you want to create it with predetermined data? (Y/N): ")
     
@@ -29,18 +103,151 @@ def userConnection():
             print("Program Exited")
             return
         if res == "Y" or res == "y":
-            clear_term()
+            clearTerm()
             db_controller = DBController(db_name)
             print(f"The database {db_name} has been created.")
+            sleep(1)
+            mainMenu()
+        else:
+            clearTerm()
+            print(f"Invalid Input {res}.")
+            userConnection()
+            return
 
     else:
         db_controller = DBController(db_name)
+        mainMenu()
+
+# main menu that ask user for input and then goes to selected menu
+def mainMenu():
+    # printMainMenuOptions()
+    isInvalid = False
+    while True:
+        printMainMenuOptions()
+        if not isInvalid:
+            user_selection = input("Selection: ")
+        else:
+            user_selection = input("Invalid Selection. Please retry: ")
+
+        if not (isInputInt(user_selection)):
+            print('Invalid Selection')
+            isInvalid = True
+            continue
+
+        match int(user_selection):
+            case 1:
+                print("entering members menu")
+                memberMenu()
+            case 2:
+                print("entering classes menu")
+                classMenu()
+            case 3:
+                print("entering equipment menu")
+                equipmentMenu()
+            case 4:
+                print("Exiting Program")
+                db_controller.close_connection()
+                sys.exit()
+            case _:
+                print("Invalid Selection")
+        
+# this menu allows a user to select an action (currently does not do anything, needs methods for each case)       
+def memberMenu():
+
+    isInvalid = False
+    while True:
+        printMemberMenuOptions()
+
+        if not isInvalid:
+            selection = input("Selection: ")
+        else:
+            selection = input("Invalid Selection. Please retry: ")
+
+        if not (isInputInt(selection)):
+            isInvalid = True
+            continue
+        
+        match int(selection):
+            case 1:
+                print("all members")
+            case 2:
+                print("adding member")
+            case 3:
+                print('updating member')
+            case 4:
+                print('deleting member')
+            case 0:
+                mainMenu()
+            case _:
+                print('Invalid Selection')
+
+# this menu allows a user to select an action (currently does not do anything, needs methods for each case)       
+def  classMenu():
+    
+    isInvalid = False
+    while True:
+        printClassMenuOptions()
+
+        if not isInvalid:
+            selection = input("Selection: ")
+        else:
+            selection = input("Invalid Selection. Please retry: ")
+
+        if not (isInputInt(selection)):
+            isInvalid = True
+            continue
+
+        match int(selection):
+            case 1:
+                print("displaying classes with their attendance")
+            case 2:
+                print("adding new class")
+            case 3:
+                print("updating class")
+            case 4:
+                print('deleting class')
+            case 5:
+                print('viewing members of class')
+            case 0:
+                mainMenu()
+            case _:
+                print('Invalid Selection')
+
+# this menu allows a user to select an action (currently does not do anything, needs methods for each case)       
+def equipmentMenu():
+    
+    isInvalid = False
+    while True:
+        printEquipmentMenuOptions()
+
+        if not isInvalid:
+            selection = input("Selection: ")
+        else:
+            selection = input("Invalid Selection. Please retry: ")
+
+        if not (isInputInt(selection)):
+            isInvalid = True
+            continue
+        
+        match int(selection):
+            case 1:
+                print("showing all equipment")
+            case 2:
+                print("add new equipment")
+            case 3:
+                print("updating equipment")
+            case 4:
+                print("deleting equipment")
+            case 0:
+                mainMenu()
+            case _:
+                print('Invalid Input')
+
 
 
 # starting method that clears the terminal and initiates the first connection method
 def main():
-    print("main")
-    clear_term()
+    clearTerm()
     userConnection()
 
 if __name__ == "__main__":

@@ -4,9 +4,23 @@ import sys
 import os
 from time import sleep
 from DBController import DBController
+from Member import *
 
 db_controller = None
 debug = True
+greeting = '''
+      ___          _____          ___     
+     /__/\        /  /::\        /  /\    
+    |  |::\      /  /:/\:\      /  /:/    
+    |  |:|:\    /  /:/  \:\    /  /:/     
+  __|__|:|\:\  /__/:/ \__\:|  /  /:/  ___ 
+ /__/::::| \:\ \  \:\ /  /:/ /__/:/  /  /\\
+ \  \:\~~\__\/  \  \:\  /:/  \  \:\ /  /:/
+  \  \:\         \  \:\/:/    \  \:\  /:/ 
+   \  \:\         \  \::/      \  \:\/:/  
+    \  \:\         \__\/        \  \::/   
+     \__\/                       \__\/    
+'''
 
 #Clears the terminal
 def clearTerm():
@@ -36,7 +50,6 @@ def printMenuTitle(title):
     print(f'{title} Menu')
     print('-'*80)
 
-
 # clears and prints options
 def printMainMenuOptions():
     clearTerm()
@@ -55,10 +68,10 @@ def printMemberMenuOptions():
     printConnectionTitle()
     printMenuTitle('Member')
     print("Please select from the below options using the number:")
-    print("1. View All Members")
-    print("2. Add a New Member")
-    print("3. Update Member Information")
-    print("4. Delete Member with ID")
+    print("1. View All Members")               #1
+    print("2. Add a New Member")               #2
+    print("3. Update Member Information")      #3
+    print("4. Delete Member with ID")          #4
     print("0. Return to Main Menu")
     print('-'*80)
 
@@ -68,11 +81,11 @@ def printClassMenuOptions():
     printConnectionTitle()
     printMenuTitle('Class')
     print("Please select from the below options using the number:")
-    print('1. Classes w/ Attendance')
-    print('2. Add New Class')
-    print('3. Update Class Information')
-    print('4. Delete Class by ID')
-    print('5. Find Members in Class by ID')
+    print('1. Classes w/ Attendance')          #5
+    print('2. Add New Class')                  #6
+    print('3. Update Class Information')       #7
+    print('4. Delete Class by ID')             #8
+    print('5. Find Members in Class by ID')    #9
     print('0. Return to Main Menu')
     print('-'*80)
 
@@ -82,10 +95,10 @@ def printEquipmentMenuOptions():
     printConnectionTitle()
     printMenuTitle('Equipment')
     print("Please select from the below options using the number:")
-    print('1. Show All Equipment')
-    print('2. Add New Equipment')
-    print('3. Update Equipment Information')
-    print('4. Delete Equipment by ID ')
+    print('1. Show All Equipment')             #10
+    print('2. Add New Equipment')              #11
+    print('3. Update Equipment Information')   #12
+    print('4. Delete Equipment by ID ')        #13
     print('0. Return to Main Menu')
     print('-'*80)
 
@@ -173,13 +186,13 @@ def memberMenu():
         
         match int(selection):
             case 1:
-                print("all members")
+                getAllMembers(db_controller)
             case 2:
-                print("adding member")
+                addMember(db_controller)
             case 3:
-                print('updating member')
+                editMember(db_controller)
             case 4:
-                print('deleting member')
+                deleteMember(db_controller)
             case 0:
                 return
             case _:
@@ -247,19 +260,8 @@ def equipmentMenu():
             case _:
                 print('Invalid Input')
 
-greeting = '''
-      ___          _____          ___     
-     /__/\        /  /::\        /  /\    
-    |  |::\      /  /:/\:\      /  /:/    
-    |  |:|:\    /  /:/  \:\    /  /:/     
-  __|__|:|\:\  /__/:/ \__\:|  /  /:/  ___ 
- /__/::::| \:\ \  \:\ /  /:/ /__/:/  /  /\\
- \  \:\~~\__\/  \  \:\  /:/  \  \:\ /  /:/
-  \  \:\         \  \:\/:/    \  \:\  /:/ 
-   \  \:\         \  \::/      \  \:\/:/  
-    \  \:\         \__\/        \  \::/   
-     \__\/                       \__\/    
-'''
+def getdb_controller():
+    return db_controller
 
 # starting method that clears the terminal and initiates the first connection method
 def main():

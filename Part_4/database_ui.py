@@ -6,13 +6,15 @@ from time import sleep
 from DBController import DBController
 
 db_controller = None
+debug = True
 
 #Clears the terminal
 def clearTerm():
-    if os.name == "nt":
-        os.system("cls")
-    else:
-        os.system("clear")
+    if not debug:
+        if os.name == "nt":
+            os.system("cls")
+        else:
+            os.system("clear")
 
 #checks wether a string can be cast to int
 def isInputInt(string):
@@ -24,15 +26,15 @@ def isInputInt(string):
 
 #prints name of database that is connected
 def printConnectionTitle():
-    print('================================================================================')
+    print('='*80)
     print(f'Connected to DB: {db_controller.getName()}')
-    print('================================================================================')
+    print('='*80)
     print('\n')
 
 #prints the title of the menu
 def printMenuTitle(title):
     print(f'{title} Menu')
-    print('--------------------------------------------------------------------------------')
+    print('-'*80)
 
 
 # clears and prints options
@@ -45,7 +47,7 @@ def printMainMenuOptions():
     print("2. Classes menu")
     print("3. Equipment menu")
     print("4. Logout and Exit")
-    print('--------------------------------------------------------------------------------')
+    print('-'*80)
 
 # clears and prints options
 def printMemberMenuOptions():
@@ -58,7 +60,7 @@ def printMemberMenuOptions():
     print("3. Update Member Information")
     print("4. Delete Member with ID")
     print("0. Return to Main Menu")
-    print('--------------------------------------------------------------------------------')
+    print('-'*80)
 
 # clears and prints options
 def printClassMenuOptions():
@@ -72,7 +74,7 @@ def printClassMenuOptions():
     print('4. Delete Class by ID')
     print('5. Find Members in Class by ID')
     print('0. Return to Main Menu')
-    print('--------------------------------------------------------------------------------')
+    print('-'*80)
 
 # clears and prints options
 def printEquipmentMenuOptions():
@@ -85,7 +87,7 @@ def printEquipmentMenuOptions():
     print('3. Update Equipment Information')
     print('4. Delete Equipment by ID ')
     print('0. Return to Main Menu')
-    print('--------------------------------------------------------------------------------')
+    print('-'*80)
 
 # asks the user to connect to a datbase and if it does not exist then if they want to create it
 def userConnection():
@@ -130,7 +132,6 @@ def mainMenu():
             user_selection = input("Invalid Selection. Please retry: ")
 
         if not (isInputInt(user_selection)):
-            print('Invalid Selection')
             isInvalid = True
             continue
 
@@ -138,18 +139,21 @@ def mainMenu():
             case 1:
                 print("entering members menu")
                 memberMenu()
+                isInvalid = False
             case 2:
                 print("entering classes menu")
                 classMenu()
+                isInvalid = False
             case 3:
                 print("entering equipment menu")
                 equipmentMenu()
+                isInvalid = False
             case 4:
                 print("Exiting Program")
                 db_controller.close_connection()
                 sys.exit()
             case _:
-                print("Invalid Selection")
+                isInvalid = True
         
 # this menu allows a user to select an action (currently does not do anything, needs methods for each case)       
 def memberMenu():
@@ -177,7 +181,7 @@ def memberMenu():
             case 4:
                 print('deleting member')
             case 0:
-                mainMenu()
+                return
             case _:
                 print('Invalid Selection')
 
@@ -209,7 +213,7 @@ def  classMenu():
             case 5:
                 print('viewing members of class')
             case 0:
-                mainMenu()
+                return
             case _:
                 print('Invalid Selection')
 
@@ -239,15 +243,28 @@ def equipmentMenu():
             case 4:
                 print("deleting equipment")
             case 0:
-                mainMenu()
+                return
             case _:
                 print('Invalid Input')
 
-
+greeting = '''
+      ___          _____          ___     
+     /__/\        /  /::\        /  /\    
+    |  |::\      /  /:/\:\      /  /:/    
+    |  |:|:\    /  /:/  \:\    /  /:/     
+  __|__|:|\:\  /__/:/ \__\:|  /  /:/  ___ 
+ /__/::::| \:\ \  \:\ /  /:/ /__/:/  /  /\\
+ \  \:\~~\__\/  \  \:\  /:/  \  \:\ /  /:/
+  \  \:\         \  \:\/:/    \  \:\  /:/ 
+   \  \:\         \  \::/      \  \:\/:/  
+    \  \:\         \__\/        \  \::/   
+     \__\/                       \__\/    
+'''
 
 # starting method that clears the terminal and initiates the first connection method
 def main():
     clearTerm()
+    print(greeting)
     userConnection()
 
 if __name__ == "__main__":

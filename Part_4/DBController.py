@@ -16,7 +16,6 @@ class DBController:
             self.create_database()
             self.insert_data()
         
-        self.close_connection()
         
     #creates a connection to the database with the supplied name
     def create_connection(self, db_file):
@@ -61,3 +60,6 @@ class DBController:
 
     def getName(self):
         return self.db_name
+    
+    def getConnection(self):
+        return self.conn

@@ -7,7 +7,8 @@ from DBController import DBController
 from Member import *
 
 db_controller = None
-debug = True
+debug = False
+
 greeting = '''
       ___          _____          ___     
      /__/\        /  /::\        /  /\    
@@ -186,6 +187,7 @@ def memberMenu():
         
         match int(selection):
             case 1:
+                clearTerm()
                 getAllMembers(db_controller)
             case 2:
                 addMember(db_controller)

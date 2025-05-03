@@ -1,7 +1,19 @@
 from DBController import DBController
 from sqlite3 import Error
 from sqlite3 import IntegrityError
+from database_ui import clearTerm
     
+def isInputInt(string):
+    try:
+        int(string)
+        return True
+    except ValueError:
+        return False
+
+def printEditMemberTitle():
+    print('-'*80)
+    print('Edit Member')
+    print('-'*80)
 
 def getAllMembers(db_controller):
 
@@ -62,10 +74,119 @@ def addMember(db_controller):
             input("Press enter to return")
 
     
-    
-    
-def editMember(db_controller):
+def editMemberSelection(db_controller):
     print("Edit Member")
+    print('-'*80)
+    isInvalid = False
+    while True:
+
+        if not isInvalid:
+            member_id = input("Enter the Member ID (0 to return): ")
+        else:
+            member_id = input("Invalid Member ID. Please retry (0 to return): ")
+
+        if not isInputInt(member_id):
+            isInvalid = True
+            continue
+
+        if member_id == '0':
+            return
+
+
+        member_info = getMember(db_controller, member_id)
+        headers = ['ID','Name','E-mail','Phone Number','Address','Age','Start Date','End Date']
+
+        if not member_info:
+            print(f"Cannot find Member with ID {member_id}")
+            isInvalid = False
+            continue
+        else:
+            editMember(db_controller, member_info, member_id, headers)
+            return
+
+def editMember(db_controller, member_info, member_id, headers):
+
+    isInvalid = False
+    while True:
+        clearTerm()
+        formatToTable(headers, member_info)
+        print("\n")
+        print("Which attribute would you like to change?")
+        print("1. Name")
+        print("2. E-mail")
+        print('3. Phone Number')
+        print('4. Address')
+        print('5. Age')
+        print('6. Start Date')
+        print('7. End Date')
+
+        if not isInvalid:
+            selected_attr = input("Select the attribute you want to change (0 to return): ")
+        else:
+            selected_attr = input("Invalid Selection. Please retry (0 to return): ")
+        
+        if selected_attr == '0':
+            return
+        
+        if not isInputInt(selected_attr):
+            isInvalid = True
+            continue
+        
+        attr_dict = {
+            '1': 'name',
+            '2': 'email',
+            '3': 'phone',
+            '4': 'address',
+            '5': 'age',
+            '6': 'membershipStartDate',
+            '7': 'membershipEndDate'
+        }
+        new_attr_value = input("Enter the new value: ")
+
+        try:
+
+            
+                
+            query = f'''
+            UPDATE Member
+            SET {attr_dict.get(selected_attr)} = ?
+            WHERE memberId = ?;
+            '''
+
+            print(query)
+            params = [new_attr_value,member_id]
+            curs = db_controller.getConnection().cursor()
+            curs.execute(query,params)
+            db_controller.getConnection().commit()
+            return
+        except Error as e:
+            print(e)
+            if 'membershipEndDate > membershipStartDate' in e:
+                print('membership start date')
+            input('Press enter to return')
+            return
+
+
+
+def getMember(db_controller, member_id):
+
+    try:
+        query = '''
+        SELECT Member.memberId, Member.name, Member.email, Member.phone, 
+        Member.address, Member.age, Member.membershipStartDate, Member.membershipEndDate
+        FROM Member WHERE memberId = ?;
+        '''
+        curs = db_controller.getConnection().cursor()
+        param = [member_id]
+        curs.execute(query,param)
+        results = curs.fetchall()
+        return results
+    
+    except Error as e:
+        print(e)
+
+
+
 
 def deleteMember(db_controller):
     print("Delete Member")

@@ -171,7 +171,7 @@ def mainMenu():
         
 # this menu allows a user to select an action (currently does not do anything, needs methods for each case)       
 def memberMenu():
-
+    clearTerm()
     isInvalid = False
     while True:
         printMemberMenuOptions()
@@ -190,9 +190,11 @@ def memberMenu():
                 clearTerm()
                 getAllMembers(db_controller)
             case 2:
+                clearTerm()
                 addMember(db_controller)
             case 3:
-                editMember(db_controller)
+                clearTerm()
+                editMemberSelection(db_controller)
             case 4:
                 deleteMember(db_controller)
             case 0:

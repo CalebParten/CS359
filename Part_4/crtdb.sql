@@ -57,7 +57,7 @@ CREATE TABLE Payment (
     planId INTEGER,
     amountPaid REAL NOT NULL CHECK(amountPaid >= 0),
     paymentDate DATE NOT NULL,
-    FOREIGN KEY (memberId) REFERENCES Member(memberId),
+    FOREIGN KEY (memberId) REFERENCES Member(memberId) ON DELETE CASCADE,
     FOREIGN KEY (planId) REFERENCES MembershipPlan(planId)
 );
 
@@ -66,6 +66,6 @@ CREATE TABLE Attends (
     classId INTEGER,
     attendanceDate DATE NOT NULL,
     PRIMARY KEY (memberId, classId, attendanceDate),
-    FOREIGN KEY (memberId) REFERENCES Member(memberId),
+    FOREIGN KEY (memberId) REFERENCES Member(memberId) ON DELETE CASCADE,
     FOREIGN KEY (classId) REFERENCES Class(classId)
 );

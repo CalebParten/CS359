@@ -21,6 +21,7 @@ class DBController:
     def create_connection(self, db_file):
         try:
             conn = sqlite3.connect(db_file)
+            conn.execute("PRAGMA foreign_keys = ON")
             print("[INFO] Connection established: " + sqlite3.sqlite_version)
 
         except Error as e:

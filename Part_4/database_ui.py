@@ -5,9 +5,11 @@ import os
 from time import sleep
 from DBController import DBController
 from Member import *
+from Class import *
+from Equipment import *
+from Format import *
 
 db_controller = None
-debug = False
 
 greeting = '''
       ___          _____          ___     
@@ -23,13 +25,6 @@ greeting = '''
      \__\/                       \__\/    
 '''
 
-#Clears the terminal
-def clearTerm():
-    if not debug:
-        if os.name == "nt":
-            os.system("cls")
-        else:
-            os.system("clear")
 
 #checks wether a string can be cast to int
 def isInputInt(string):
@@ -196,7 +191,7 @@ def memberMenu():
                 clearTerm()
                 editMemberSelection(db_controller)
             case 4:
-                deleteMember(db_controller)
+                deleteMemberSelect(db_controller)
             case 0:
                 return
             case _:
@@ -220,15 +215,20 @@ def  classMenu():
 
         match int(selection):
             case 1:
-                print("displaying classes with their attendance")
+                clearTerm()
+                getAllClasses(db_controller)
             case 2:
-                print("adding new class")
+                clearTerm()
+                addClass(db_controller)
             case 3:
-                print("updating class")
+                clearTerm()
+                updateClass(db_controller)
             case 4:
-                print('deleting class')
+                clearTerm()
+                deleteClass(db_controller)
             case 5:
-                print('viewing members of class')
+                clearTerm()
+                getClassMembers(db_controller)
             case 0:
                 return
             case _:
@@ -252,17 +252,25 @@ def equipmentMenu():
         
         match int(selection):
             case 1:
-                print("showing all equipment")
+                clearTerm()
+                getAllEquipment(db_controller)
+                isInvalid = False
             case 2:
-                print("add new equipment")
+                clearTerm()
+                addEquipment(db_controller)
+                isInvalid = False
             case 3:
-                print("updating equipment")
+                clearTerm()
+                editEquipmentSelection(db_controller)
+                isInvalid = False
             case 4:
-                print("deleting equipment")
+                clearTerm()
+                deleteEquipment(db_controller)
+                isInvalid = False
             case 0:
                 return
             case _:
-                print('Invalid Input')
+                isInvalid = True
 
 def getdb_controller():
     return db_controller

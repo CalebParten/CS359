@@ -220,7 +220,7 @@ def deleteMemberSelect(db_controller):
         
         clearTerm()
         formatToTable(headers,member_info)
-        print("/n")
+        print("\n")
         print(f"Please confirm the deletion of member with ID {member_id}")
         confirmation = input("Confirmation (yes/no): ")
 

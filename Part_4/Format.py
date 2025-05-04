@@ -1,6 +1,6 @@
 import sys
 import os
-debug = True
+debug = False
 
 # formats specified headers and results into visual table 
 def formatToTable(headers, results):
